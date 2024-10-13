@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     // Navigate to the AddNewPlacePage
     Navigator.of(context).pushNamed('/addNewPlacePage');
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
