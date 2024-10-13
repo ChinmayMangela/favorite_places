@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'package:favorite_places/models/place.dart';
 import 'package:favorite_places/providers/favorite_places_provider.dart';
+import 'package:favorite_places/providers/selected_image_provider.dart';
 import 'package:favorite_places/utils/utils.dart';
 import 'package:favorite_places/widgets/custom_text_field.dart';
+import 'package:favorite_places/widgets/image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,13 +19,23 @@ class _AddNewPlacePageState extends State<AddNewPlacePage> {
   final _titleController = TextEditingController();
 
   void addNewPlace() {
+    final selectedImageProvider =
+        Provider.of<SelectedImageProvider>(context, listen: false);
     final nameOfPlace = _titleController.text.trim();
-    if(nameOfPlace.isEmpty) {
+    File? image = selectedImageProvider.selectedImage;
+    if (nameOfPlace.isEmpty) {
       Utils.showSnackBar('Enter name');
       return;
     }
-    final favoritePlaceProvider = Provider.of<FavoritePlacesProvider>(context, listen: false);
-    final favoritePlace = Place(name: nameOfPlace);
+
+    if(image == null) {
+      Utils.showSnackBar('Please select an image');
+      return;
+    }
+
+    final favoritePlaceProvider =
+        Provider.of<FavoritePlacesProvider>(context, listen: false);
+    final favoritePlace = Place(name: nameOfPlace, image: image);
     favoritePlaceProvider.addPlace(favoritePlace);
     Navigator.of(context).pop();
   }
@@ -48,14 +61,19 @@ class _AddNewPlacePageState extends State<AddNewPlacePage> {
   }
 
   Widget _buildBody() {
+    final screenHeight = Utils.getScreenHeight(context);
     return Padding(
       padding: const EdgeInsets.all(18.0),
-      child: Column(
-        children: [
-          CustomTextField(controller: _titleController),
-          const SizedBox(height: 10),
-          _buildButton(),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            CustomTextField(controller: _titleController),
+            SizedBox(height: screenHeight * 0.03),
+            const ImageInput(),
+            SizedBox(height: screenHeight * 0.03),
+            _buildButton(),
+          ],
+        ),
       ),
     );
   }

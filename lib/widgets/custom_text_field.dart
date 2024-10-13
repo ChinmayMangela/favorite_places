@@ -11,6 +11,9 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
       controller: controller,
       decoration: const InputDecoration(
         labelText:  'title',

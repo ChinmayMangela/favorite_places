@@ -1,8 +1,7 @@
-import 'package:favorite_places/main.dart';
-import 'package:favorite_places/pages/add_new_place_page.dart';
-import 'package:favorite_places/utils/utils.dart';
+import 'package:favorite_places/providers/selected_image_provider.dart';
 import 'package:favorite_places/widgets/places_list.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +11,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  void navigateToAddNewPlace(BuildContext context) {
+    final selectedImageProvider = Provider.of<SelectedImageProvider>(context, listen: false);
+
+    // Reset the image before navigation
+    selectedImageProvider.selectImage(null);
+
+    // Navigate to the AddNewPlacePage
+    Navigator.of(context).pushNamed('/addNewPlacePage');
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildAddButton() {
     return IconButton(
       onPressed: () {
-        navigatorKey.currentState!.pushNamed('/addNewPlacePage');
+        navigateToAddNewPlace(context);
       },
       icon: const Icon(Icons.add),
     );

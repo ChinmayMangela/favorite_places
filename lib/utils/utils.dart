@@ -29,6 +29,7 @@ class Utils {
         context: context,
         builder: (context) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
             content: child,
           );
         });
